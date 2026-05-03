@@ -137,9 +137,11 @@ Choose exactly one primary action per insight:
 | Action | When |
 |--------|------|
 | create | No existing card covers the insight |
-| update | Existing card covers the same insight but lacks new detail |
-| link | New card is needed and candidate cards are meaningfully related |
+| create with links | No existing card covers the insight, but candidate cards are meaningfully related — create a new card and embed wikilinks with relationship explanations |
+| update | Existing card covers the same insight but lacks new detail (requires preview) |
 | skip | Insight is duplicate, too obvious, or not durable |
+
+Note: there is no "link-only" action in v1. Adding wikilinks to an existing card without other changes is an update and requires the update preview flow.
 
 Merge/archive is excluded from v1 unless the user explicitly asks.
 
@@ -193,11 +195,11 @@ Store experimental metadata as simple string scalars. This is safe with the curr
 
 ```yaml
 context: One sentence summary.
-keywords: retrieval, metadata, agentic memory
-tags: memory, workflow, experimental
+keywords: 'retrieval, metadata, agentic memory'
+tags: 'memory, workflow, experimental'
 ```
 
-The skill must treat these as opaque strings on read (split on `, ` if needed) and must not assume array semantics. A future PR may improve `stringifyFrontmatter` to support YAML sequences, at which point the skill can migrate.
+Note: `stringifyFrontmatter` single-quotes values that contain commas, so the on-disk representation will use quotes as shown above. The skill must treat these as opaque strings on read (split on `, ` if needed) and must not assume array semantics. A future PR may improve `stringifyFrontmatter` to support YAML sequences, at which point the skill can migrate.
 
 ## Testing Strategy
 
