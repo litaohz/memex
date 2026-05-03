@@ -21,7 +21,7 @@ Agentic reasoning stays in the skill. Core memex remains responsible for configu
 ```text
 skills/memex-agentic-memory/SKILL.md
   -> uses memex_search / memex_read / memex_write / memex_retro
-  -> performs agent reasoning for create, link, update, skip
+  -> performs agent reasoning for create (with links), update, skip
   -> gated by .memexrc.experimental.agenticMemory
 
 src/lib/config.ts
