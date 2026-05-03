@@ -209,6 +209,18 @@ describe("readConfig", () => {
     expect(config.experimental).toBeUndefined();
   });
 
+  it("treats experimental: {} (empty object) as undefined", async () => {
+    await writeFile(join(tmpDir, ".memexrc"), JSON.stringify({ experimental: {} }));
+    const config = await readConfig(tmpDir);
+    expect(config.experimental).toBeUndefined();
+  });
+
+  it("treats experimental.agenticMemory: null as disabled", async () => {
+    await writeFile(join(tmpDir, ".memexrc"), JSON.stringify({ experimental: { agenticMemory: null } }));
+    const config = await readConfig(tmpDir);
+    expect(config.experimental).toBeUndefined();
+  });
+
   it("preserves existing config fields alongside experimental", async () => {
     await writeFile(
       join(tmpDir, ".memexrc"),
