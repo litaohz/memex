@@ -306,6 +306,27 @@ npm run test:watch    # vitest watch mode
 | `ollamaModel` | string | `nomic-embed-text` | |
 | `ollamaBaseUrl` | string | `http://localhost:11434` | |
 | `localModelPath` | string | HuggingFace URI | |
+| `experimental` | object | — | Experimental feature flags (see below) |
+
+#### Experimental Flags
+
+The `experimental` field is an optional object for gating features that are not yet stable.
+
+| Flag | Type | Default | Notes |
+|------|------|---------|-------|
+| `agenticMemory` | boolean | `false` | Enables the A-MEM-inspired agentic memory skill workflow. Only `true` activates; `false`, `null`, missing, or non-boolean values are treated as disabled. |
+
+Example `.memexrc` with experimental flags:
+
+```json
+{
+  "experimental": {
+    "agenticMemory": true
+  }
+}
+```
+
+When `agenticMemory` is enabled, agents may use the `memex-agentic-memory` skill for structured knowledge capture (observe → draft → enrich → retrieve → decide → preview → write → verify). When disabled, agents use the standard `memex-retro` workflow. See `skills/memex-agentic-memory/SKILL.md` for the full skill specification.
 
 ### Environment Variables
 
