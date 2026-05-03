@@ -119,7 +119,7 @@ Choose exactly one primary action per insight:
 
 | Action | When |
 |--------|------|
-| **create** | No existing card covers the insight. Add `[[wikilinks]]` to related candidates when meaningfully related. |
+| **create** | No existing card covers the insight. Embed `[[wikilinks]]` in the new card pointing to related candidates when meaningfully related. |
 | **update** | Existing card covers the same insight but lacks new detail |
 | **skip** | Insight is duplicate, too obvious, or not durable |
 
@@ -167,8 +167,10 @@ This relates to [[existing-card]] because <explicit relationship explanation>.
 EOF
 ```
 
-On update, preserve existing frontmatter fields (title, created) and append
-new information to the body.
+On update, copy ALL existing frontmatter fields from the current card (title,
+created, source, category, context, keywords, tags, and any custom fields).
+Only modify the specific fields previewed in Step 6. Append new information
+to the body.
 
 ### Step 8: Verify
 
@@ -192,6 +194,6 @@ Confirm:
   - Bad: "Related: [[jwt-migration]]"
 - **No auto-linking**: Never add links based solely on keyword overlap or embedding score.
 - **No silent mutation**: Never update an existing card without the preview step.
-- **Preserve frontmatter**: When updating, keep original title, created, and source fields.
+- **Preserve frontmatter**: When updating, copy all existing frontmatter fields. Only change fields explicitly previewed.
 - **Metadata as strings**: Use comma-separated strings for keywords/tags, not arrays.
 - **Fallback**: If the feature flag is disabled, use `memex-retro` instead.
