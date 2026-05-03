@@ -19,22 +19,13 @@ retrieval, and deliberate linking.
 
 ## Prerequisite: Feature Flag Guard
 
-Before proceeding, check that the feature flag is enabled:
+Before proceeding, locate `.memexrc` using the same precedence as core memex:
 
-```bash
-# Read .memexrc from MEMEX_HOME (or ~/.memex)
-cat "${MEMEX_HOME:-$HOME/.memex}/.memexrc"
-```
+1. `$MEMEX_HOME/.memexrc` (if `MEMEX_HOME` env var is set)
+2. Walk up from the current directory looking for `.memexrc`
+3. `~/.memex/.memexrc` (fallback)
 
-Look for:
-
-```json
-{
-  "experimental": {
-    "agenticMemory": true
-  }
-}
-```
+Check that `experimental.agenticMemory` is exactly `true`.
 
 **If the flag is missing, false, or not exactly `true`, STOP. Use the standard
 `memex-retro` skill instead.** Do not proceed with the agentic workflow.
@@ -97,16 +88,18 @@ the current `stringifyFrontmatter` implementation.
 
 ### Step 4: Candidate Retrieval
 
-Before writing, search for related existing cards:
+Before writing, search for related existing cards.
 
-```bash
-memex search "<topic query>" --compact --limit 8
-```
-
-If semantic search is available:
+Try semantic search first:
 
 ```bash
 memex search "<topic query>" --semantic --compact --limit 8
+```
+
+If semantic search fails or is unavailable, fall back to keyword search:
+
+```bash
+memex search "<topic query>" --compact --limit 8
 ```
 
 Read the top candidates that look relevant:
@@ -126,9 +119,8 @@ Choose exactly one primary action per insight:
 
 | Action | When |
 |--------|------|
-| **create** | No existing card covers the insight |
+| **create** | No existing card covers the insight. Add `[[wikilinks]]` to related candidates when meaningfully related. |
 | **update** | Existing card covers the same insight but lacks new detail |
-| **link** | New card is needed AND candidate cards are meaningfully related |
 | **skip** | Insight is duplicate, too obvious, or not durable |
 
 Rules:
@@ -162,7 +154,7 @@ memex write <slug> << 'EOF'
 ---
 title: <title>
 created: <YYYY-MM-DD>
-source: retro
+source: <client>
 category: <optional>
 context: <one sentence>
 keywords: <comma-separated terms>
