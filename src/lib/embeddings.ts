@@ -6,6 +6,7 @@ import { request as httpRequest } from "node:http";
 import { join, dirname } from "node:path";
 import { homedir } from "node:os";
 import type { CardStore } from "./store.js";
+import { parseFrontmatter } from "./parser.js";
 
 /**
  * Generic embedding provider interface.
@@ -721,6 +722,30 @@ export interface EmbedCardsResult {
 }
 
 /**
+ * Build enriched text for embedding by prepending parsed metadata fields
+ * (title, category, context, keywords, tags) to the card body.
+ * This improves semantic search quality by making metadata visible to the
+ * embedding model without changing card storage.
+ */
+export function buildEmbeddingText(raw: string): string {
+  const { data, content } = parseFrontmatter(raw);
+  const parts: string[] = [];
+
+  for (const key of ["title", "category", "context", "keywords", "tags"] as const) {
+    const val = data[key];
+    if (typeof val === "string" && val.trim()) {
+      parts.push(`${key}: ${val.trim()}`);
+    }
+  }
+
+  if (parts.length === 0) {
+    return raw;
+  }
+
+  return parts.join("\n") + "\n\n" + content;
+}
+
+/**
  * Scan all cards, embed new/changed ones, remove stale cache entries.
  */
 export async function embedCards(
@@ -739,7 +764,7 @@ export async function embedCards(
     const hash = contentHash(raw);
 
     if (cache.needsUpdate(card.slug, hash)) {
-      toEmbed.push({ slug: card.slug, hash, text: raw });
+      toEmbed.push({ slug: card.slug, hash, text: buildEmbeddingText(raw) });
     }
   }
 

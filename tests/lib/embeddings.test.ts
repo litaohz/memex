@@ -7,6 +7,7 @@ import {
   cosineSimilarity,
   contentHash,
   embedCards,
+  buildEmbeddingText,
   type EmbeddingProvider,
 } from "../../src/lib/embeddings.js";
 import { CardStore } from "../../src/lib/store.js";
@@ -121,6 +122,61 @@ describe("contentHash", () => {
 
   it("returns different hashes for different content", () => {
     expect(contentHash("a")).not.toBe(contentHash("b"));
+  });
+});
+
+// --- buildEmbeddingText ---
+
+describe("buildEmbeddingText", () => {
+  it("prepends title, category, context, keywords, tags to body", () => {
+    const raw = `---
+title: My Card
+created: 2026-05-04
+source: test
+category: debugging
+context: Fixes a tricky parser bug
+keywords: parser, yaml, frontmatter
+tags: bugfix, core
+---
+
+The actual card body.`;
+    const result = buildEmbeddingText(raw);
+    expect(result).toContain("title: My Card");
+    expect(result).toContain("category: debugging");
+    expect(result).toContain("context: Fixes a tricky parser bug");
+    expect(result).toContain("keywords: parser, yaml, frontmatter");
+    expect(result).toContain("tags: bugfix, core");
+    expect(result).toContain("The actual card body.");
+    // Should NOT include non-metadata fields like created/source
+    expect(result).not.toContain("created:");
+    expect(result).not.toContain("source:");
+  });
+
+  it("returns raw text when no metadata fields are present", () => {
+    const raw = "Just plain text, no frontmatter.";
+    expect(buildEmbeddingText(raw)).toBe(raw);
+  });
+
+  it("returns raw text when frontmatter has no relevant fields", () => {
+    const raw = `---
+created: 2026-05-04
+source: test
+---
+
+Body only.`;
+    expect(buildEmbeddingText(raw)).toBe(raw);
+  });
+
+  it("handles partial metadata (only title)", () => {
+    const raw = `---
+title: Solo Title
+created: 2026-05-04
+---
+
+Some content.`;
+    const result = buildEmbeddingText(raw);
+    expect(result).toMatch(/^title: Solo Title\n\n/);
+    expect(result).toContain("Some content.");
   });
 });
 
