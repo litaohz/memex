@@ -735,6 +735,8 @@ export function buildEmbeddingText(raw: string): string {
     const val = data[key];
     if (typeof val === "string" && val.trim()) {
       parts.push(`${key}: ${val.trim()}`);
+    } else if (Array.isArray(val) && val.length > 0) {
+      parts.push(`${key}: ${val.join(", ")}`);
     }
   }
 
@@ -761,10 +763,11 @@ export async function embedCards(
   for (const card of cards) {
     currentSlugs.add(card.slug);
     const raw = await store.readCard(card.slug);
-    const hash = contentHash(raw);
+    const text = buildEmbeddingText(raw);
+    const hash = contentHash(text);
 
     if (cache.needsUpdate(card.slug, hash)) {
-      toEmbed.push({ slug: card.slug, hash, text: buildEmbeddingText(raw) });
+      toEmbed.push({ slug: card.slug, hash, text });
     }
   }
 
