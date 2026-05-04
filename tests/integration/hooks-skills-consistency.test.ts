@@ -59,6 +59,21 @@ describe("hooks ↔ skills consistency", () => {
     expect(command).toContain("memex-retro");
   });
 
+  it("every skill directory has a SKILL.md file", () => {
+    const { readdirSync } = require("node:fs");
+    const skillsDir = join(ROOT, "skills");
+    const skillDirs = readdirSync(skillsDir, { withFileTypes: true })
+      .filter((d: any) => d.isDirectory())
+      .map((d: any) => d.name);
+
+    expect(skillDirs.length).toBeGreaterThan(0);
+
+    for (const dir of skillDirs) {
+      const skillPath = join(skillsDir, dir, "SKILL.md");
+      expect(existsSync(skillPath), `${dir}/SKILL.md missing`).toBe(true);
+    }
+  });
+
   it("hooks.json uses CLAUDE_PLUGIN_ROOT instead of global memex binary", () => {
     const command: string = hooks.hooks.SessionStart[0].hooks[0].command;
     // Should reference the bundled CLI via CLAUDE_PLUGIN_ROOT
@@ -67,5 +82,28 @@ describe("hooks ↔ skills consistency", () => {
     // Should NOT depend on a globally installed memex binary
     expect(command).not.toContain("command -v memex");
     expect(command).not.toMatch(/(?<!\$MEMEX_CLI )(?<!\$\{MEMEX_CLI\} )(?<!\")\bmemex sync\b/);
+  });
+});
+
+describe("memex-agentic-memory skill", () => {
+  const skillPath = join(ROOT, "skills/memex-agentic-memory/SKILL.md");
+  const content = readFileSync(skillPath, "utf-8");
+
+  it("exists and is non-empty", () => {
+    expect(content.length).toBeGreaterThan(100);
+  });
+
+  it("contains the feature flag guard", () => {
+    expect(content).toContain("experimental.agenticMemory");
+    expect(content).toMatch(/STOP/);
+  });
+
+  it("references memex-retro as fallback when flag is disabled", () => {
+    expect(content).toContain("memex-retro");
+  });
+
+  it("has YAML frontmatter with whenToUse", () => {
+    expect(content).toMatch(/^---\r?\n/);
+    expect(content).toContain("whenToUse:");
   });
 });
