@@ -29,9 +29,10 @@ src/lib/config.ts
   -> parses experimental.agenticMemory
   -> default false
 
-optional later, separate from agentic-memory v1:
-src/commands/search.ts / src/lib/embeddings.ts
-  -> enhanced retrieval text as an independent search improvement with its own tests
+implemented on agentic-memory-harness branch (PR 4), separate from agentic-memory v1:
+src/lib/embeddings.ts
+  -> buildEmbeddingText() enriches embedding input with parsed metadata
+  -> cache freshness keyed off enriched text, not raw card content
 ```
 
 ## Feature Flag
@@ -247,9 +248,14 @@ Files:
 
 No core command changes. Skill validation tests added on `agentic-memory-harness` branch.
 
-### PR 4: Retrieval Substrate — Not started
+### PR 4: Retrieval Substrate — **Implemented** (on `agentic-memory-harness` branch)
 
-Optional and separate from agentic-memory v1. Improve semantic retrieval text to include existing metadata such as title, category, context, keywords, and tags. Treat this as a normal search improvement with its own tests and review; the agentic-memory flag must not be required for it.
+Files:
+
+- `src/lib/embeddings.ts` — added `buildEmbeddingText()` to enrich embedding input with parsed frontmatter (title, category, context, keywords, tags); updated `contentHash()` to hash enriched text for cache freshness; added array support for `keywords`/`tags` metadata fields.
+- `tests/lib/embeddings.test.ts` — 6 new tests covering full/partial/no/array metadata enrichment, cache freshness keyed off enriched text, and provider spy verifying enriched text is sent to `provider.embed()`.
+
+This is a general search improvement, not gated by the agenticMemory flag. Awaiting evaluator review before milestone rollup.
 
 ### PR 5: Helper Workflow — Not started
 

@@ -136,7 +136,7 @@ When a PR is warranted, keep it small:
 1. PRD and dev spec only. — **Merged** (PR #104)
 2. Feature flag config parsing and tests only. — **Merged** (PR #104)
 3. Experimental skill with default-off guard only. — **Merged** (PR #104)
-4. Optional retrieval substrate improvements. — Not started.
+4. Optional retrieval substrate improvements. — **Implemented** on `agentic-memory-harness` branch (enriched embedding text + cache freshness fix). Awaiting evaluator review.
 5. Optional helper tool or MCP workflow after the skill proves useful. — Not started.
 
 ## Resolved Questions
