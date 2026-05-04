@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -60,11 +60,10 @@ describe("hooks ↔ skills consistency", () => {
   });
 
   it("every skill directory has a SKILL.md file", () => {
-    const { readdirSync } = require("node:fs");
     const skillsDir = join(ROOT, "skills");
     const skillDirs = readdirSync(skillsDir, { withFileTypes: true })
-      .filter((d: any) => d.isDirectory())
-      .map((d: any) => d.name);
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name);
 
     expect(skillDirs.length).toBeGreaterThan(0);
 
@@ -93,9 +92,16 @@ describe("memex-agentic-memory skill", () => {
     expect(content.length).toBeGreaterThan(100);
   });
 
-  it("contains the feature flag guard", () => {
+  it("contains the feature flag guard with default-off contract", () => {
     expect(content).toContain("experimental.agenticMemory");
-    expect(content).toMatch(/STOP/);
+    // Must instruct agents to STOP when flag is disabled
+    expect(content).toContain("STOP");
+    // Must specify the flag check is strict equality to true
+    expect(content).toMatch(/exactly\s+`?true`?/i);
+    // Must state fallback to memex-retro when disabled
+    expect(content).toMatch(/flag is missing.*false.*STOP/s);
+    expect(content).toContain("memex-retro");
+    expect(content).toContain("Do not proceed");
   });
 
   it("references memex-retro as fallback when flag is disabled", () => {
