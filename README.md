@@ -122,7 +122,7 @@ Optional settings go in `~/.memex/.memexrc` (JSON):
 ```json
 {
   "nestedSlugs": true,
-  "searchDirs": ["cards", "shared"],
+  "searchDirs": ["shared"],
   "experimental": {
     "agenticMemory": true
   }
@@ -132,14 +132,14 @@ Optional settings go in `~/.memex/.memexrc` (JSON):
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | `nestedSlugs` | boolean | `false` | Allow `/` in slugs for hierarchical card paths |
-| `searchDirs` | string[] | `["cards"]` | Directories to search for cards |
+| `searchDirs` | string[] | — | Extra directories to search with `--all` (in addition to the built-in `cards/` store) |
 | `experimental.agenticMemory` | boolean | `false` | Enable A-MEM-inspired agentic memory workflow (see below) |
 
 #### Experimental: Agentic Memory
 
 When `experimental.agenticMemory` is `true`, agents gain access to a structured memory skill that guides them through: observe → draft atomic card → enrich metadata → retrieve candidates → decide (create/update/skip) → preview → write → verify.
 
-This produces higher-quality cards with deliberate `[[wikilinks]]` and metadata enrichment, compared to the default recall/retro workflow. The feature is default-off and does not change any existing behavior when disabled.
+This produces higher-quality cards with agent-proposed `[[wikilinks]]` (links are suggested after candidate retrieval and agent review, never added from keyword or embedding similarity alone) and metadata enrichment, compared to the default recall/retro workflow. The feature is default-off and does not change any existing behavior when disabled.
 
 See `skills/memex-agentic-memory/SKILL.md` for the full skill specification and `docs/ARCHITECTURE.md` for config details.
 
