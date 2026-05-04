@@ -85,7 +85,8 @@ skills/                       # Claude Code skills (bundled in plugin)
 ├── memex-organize/SKILL.md
 ├── memex-sync/SKILL.md
 ├── memex-best-practices/SKILL.md
-└── memex-agentic-memory/SKILL.md  # Experimental (requires agenticMemory flag)
+├── memex-agentic-memory/SKILL.md  # Experimental (requires agenticMemory flag)
+└── agent-prompts-warmup/SKILL.md  # FRE audit and agent instruction sync
 hooks/
 └── hooks.json                # Claude Code SessionStart hook
 .claude-plugin/
@@ -232,7 +233,7 @@ post:organize → autoSync
 ### Claude Code Plugin
 
 - **SessionStart hook** (`hooks/hooks.json`): checks CLI install, runs sync, injects recall/retro reminders
-- **6 skills**: recall, retro, organize, sync, best-practices, agentic-memory (experimental)
+- **7 skills**: recall, retro, organize, sync, best-practices, agentic-memory (experimental), agent-prompts-warmup
 - **Install**: `/plugin install memex@memex`
 - **Marketplace**: `.claude-plugin/marketplace.json`
 
