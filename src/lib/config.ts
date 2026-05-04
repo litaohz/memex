@@ -1,7 +1,8 @@
 import { readFile, readdir, access } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { homedir } from "node:os";
-import type { EmbeddingProviderType } from "./embeddings.js";
+/** Embedding provider types. Defined locally to avoid hard dependency on embeddings module. */
+export type EmbeddingProviderType = "openai" | "azure" | "local" | "ollama";
 
 export interface MemexConfig {
   nestedSlugs: boolean;
