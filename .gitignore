@@ -3,3 +3,5 @@ node_modules/
 .mcpregistry_registry_token
 .claude/
 .superpowers/
+.harness/
+.multica-harness/
