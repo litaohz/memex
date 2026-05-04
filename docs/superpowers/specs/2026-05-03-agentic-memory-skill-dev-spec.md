@@ -1,7 +1,8 @@
 # Dev Spec: Experimental Agentic Memory Skill
 
-Status: Draft
+Status: Active (PRs 1–3 merged via PR #104)
 Date: 2026-05-03
+Last updated: 2026-05-04
 Related PRD: `docs/superpowers/specs/2026-05-03-agentic-memory-skill-prd.md`
 
 ## Design Principle
@@ -221,38 +222,36 @@ No core behavior should change when the flag is disabled. Existing tests must pa
 
 ## PR Slicing
 
-### PR 1: PRD and Dev Spec
+### PR 1: PRD and Dev Spec — **Merged** (PR #104)
 
-Files only:
+Files:
 
 - `docs/superpowers/specs/2026-05-03-agentic-memory-skill-prd.md`
 - `docs/superpowers/specs/2026-05-03-agentic-memory-skill-dev-spec.md`
 
-### PR 2: Feature Flag Parsing
+### PR 2: Feature Flag Parsing — **Merged** (PR #104)
 
 Files:
 
 - `src/lib/config.ts`
-- `tests/lib/config.test.ts`
+- `tests/lib/config.test.ts` (30 tests)
 - `docs/ARCHITECTURE.md` config section
 
-No behavior change.
+No behavior change. Config tests cover true/false/missing/invalid/null/string/number values.
 
-### PR 3: Experimental Skill
+### PR 3: Experimental Skill — **Merged** (PR #104)
 
 Files:
 
-- `skills/memex-agentic-memory/SKILL.md`
-- optional plugin packaging references if required
-- docs update describing opt-in behavior
+- `skills/memex-agentic-memory/SKILL.md` (8-step workflow with feature flag guard)
 
-No core command changes.
+No core command changes. Skill validation tests added on `agentic-memory-harness` branch.
 
-### PR 4: Retrieval Substrate
+### PR 4: Retrieval Substrate — Not started
 
 Optional and separate from agentic-memory v1. Improve semantic retrieval text to include existing metadata such as title, category, context, keywords, and tags. Treat this as a normal search improvement with its own tests and review; the agentic-memory flag must not be required for it.
 
-### PR 5: Helper Workflow
+### PR 5: Helper Workflow — Not started
 
 Optional. Add a read-only helper that returns candidate neighbors for agent review. It must not write links or update cards.
 

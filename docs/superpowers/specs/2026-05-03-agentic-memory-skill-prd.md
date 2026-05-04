@@ -1,7 +1,8 @@
 # PRD: A-MEM-Inspired Agentic Memory Skill
 
-Status: Draft
+Status: Active (v1 merged via PR #104)
 Date: 2026-05-03
+Last updated: 2026-05-04
 Owner: memex contributors
 
 ## Summary
@@ -132,11 +133,11 @@ Iterate on the shared `agentic-memory-harness` branch. Do not open frequent PRs 
 
 When a PR is warranted, keep it small:
 
-1. PRD and dev spec only.
-2. Feature flag config parsing and tests only.
-3. Experimental skill with default-off guard only.
-4. Optional retrieval substrate improvements.
-5. Optional helper tool or MCP workflow after the skill proves useful.
+1. PRD and dev spec only. — **Merged** (PR #104)
+2. Feature flag config parsing and tests only. — **Merged** (PR #104)
+3. Experimental skill with default-off guard only. — **Merged** (PR #104)
+4. Optional retrieval substrate improvements. — Not started.
+5. Optional helper tool or MCP workflow after the skill proves useful. — Not started.
 
 ## Resolved Questions
 
